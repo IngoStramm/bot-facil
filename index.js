@@ -1,49 +1,21 @@
 const Discord = require('discord.js');
-const bot  = new Discord.Client();
-const ms = require('ms');
+const client = new Discord.Client();
 
-const PREFIX = '!';
-var version = '1.0.0';
-
-bot.on('ready',() => {
-	console.log('Bot online');
+client.on('ready', () => {
+    console.log('I am ready!');
 });
-
-bot.on('message', message=> {
-
-	let args = message.content.substring(PREFIX.length).split(' ');
-
-	switch( args[0] ) {
-		case 'mute':
-			let person = message.guild.member(message.mentions.users.first() || message.guild.members.cache.get(args[1]))
-			if(!person) return message.reply('Não encontrei este membro');
-
-			let mainrole = message.guild.roles.cache.find(role => role.name === 'newbie');
-			let muterole = message.guild.roles.cache.find(role => role.name === 'mute');
-
-			if(!muterole) return message.reply('Não encontrei esse grupo "mute"');
-
-			let time = args[2];
-			if(!time) {
-				return message.reply('Não foi especificado um tempo para o mute');
-			}
-
-			person.roles.remove(mainrole.id);
-			person.roles.add(muterole.id);
-
-			message.channel.send(`@${person.user.tag} foi silenciado por ${ms(ms(time))}`);
-
-			setTimeout(function(){
-                person.roles.add(mainrole.id)
-                person.roles.remove(muterole.id)
-                message.channel.send(`@${person.user.tag} was unmuted`)
-            }, ms(time));
 
  
 
+client.on('message', message => {
 
-		break;
+    if (message.content === 'ping') {
+       message.reply('pong');
 	}
+
 });
 
-bot.login(process.env.BOT_TOKEN);//BOT_TOKEN is the Client Secret
+ 
+
+// THIS  MUST  BE  THIS  WAY
+client.login(process.env.BOT_TOKEN);//BOT_TOKEN is the Client Secret
